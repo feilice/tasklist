@@ -1,8 +1,14 @@
 class TasksController < ApplicationController
+    before_action :require_user_logged_in, only: [:index]
     before_action :set_task, only: [:show, :edit, :update, :destroy]
     
+    
     def index
-        @tasks = Task.all.page(params[:page]).per(3)
+        if logged_in?
+            @tasks = Task.all.page(params[:page]).per(3)
+        else
+            render :new
+        end
     end
     
     def show
